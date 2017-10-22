@@ -10,28 +10,23 @@ import (
 func main() {
 
 	// Initialize Set
-	s := set.New()
+	set1 := set.New()
 
 	// Add items concurrently (item1, item2, and so on)
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 5; i++ {
 		item := "item" + strconv.Itoa(i)
-		fmt.Println("adding", item)
-		s.Add(item)
+		set1.Add(item)
 	}
 
-	fmt.Println(s)
-	s2 := set.New("new1", "new2", "new3")
-	fmt.Println(s2)
+	fmt.Println("First set (set1):\n\t", set1)
+	fmt.Println("TypeOf(set1) = ", reflect.TypeOf(set1).String())
 
-	tmp := set.Union(s, s2)
-	fmt.Println(tmp)
+	set2 := set.New("item0", "item3", "new1", "new2", "new3")
+	fmt.Println("Second set (set2):\n\t", set2)
+	fmt.Println("TypeOf(set2) = ", reflect.TypeOf(set2).String())
 
-	st := set.New("1", "2", "3")
-	rt := set.New("3", "4", "5")
-	xt := set.New("5", "6", "7")
+	fmt.Println("set1 + set2:\n\t", set.Union(set1, set2))
+	fmt.Println("set1 - set2\n\t", set.Difference(set1, set2))
+	fmt.Println("set1 * set2\n\t", set.Intersection(set1, set2))
 
-	u := set.Union(st, rt, xt)
-	settype := reflect.TypeOf(u).String()
-	fmt.Println("result = ", u)
-	fmt.Println(settype)
 }
