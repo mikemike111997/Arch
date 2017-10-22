@@ -29,6 +29,11 @@ type Interface interface {
 // helpful to not write everywhere struct{}{}
 var keyExists = struct{}{}
 
+// Provides a common set baseline for both threadsafe and non-ts Sets.
+type set struct {
+	m map[interface{}]struct{} // struct{} doesn't take up space
+}
+
 // Union is the merger of multiple sets. It returns a new set with all the
 // elements present in all the sets that are passed.
 //
