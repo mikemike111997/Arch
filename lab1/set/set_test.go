@@ -68,81 +68,41 @@ func Test_Intersection(t *testing.T) {
 	}
 }
 
-func Test_SymmetricDifference(t *testing.T) {
-	s := New("1", "2", "3")
-	r := New("3", "4", "5")
-	u := SymmetricDifference(s, r)
-
-	if u.Size() != 4 {
-		t.Error("SymmetricDifference: the set doesn't have all items in it.")
-	}
-
-	if !u.Has("1", "2", "4", "5") {
-		t.Error("SymmetricDifference: items are not availabile in the set.")
-	}
-}
-
-func Test_StringSlice(t *testing.T) {
-	s := New("san francisco", "istanbul", 3.14, 1321, "ankara")
-	u := StringSlice(s)
-
-	if len(u) != 3 {
-		t.Error("StringSlice: slice should only have three items")
-	}
-
-	for _, item := range u {
-		r := reflect.TypeOf(item)
-		if r.Kind().String() != "string" {
-			t.Error("StringSlice: slice item should be a string")
-		}
-	}
-}
-
-func Test_IntSlice(t *testing.T) {
-	s := New("san francisco", "istanbul", 3.14, 1321, "ankara", 8876)
-	u := IntSlice(s)
-
-	if len(u) != 2 {
-		t.Error("IntSlice: slice should only have two items")
-	}
-
-	for _, item := range u {
-		r := reflect.TypeOf(item)
-		if r.Kind().String() != "int" {
-			t.Error("Intslice: slice item should be a int")
-		}
-	}
-}
-
-func BenchmarkSetEquality(b *testing.B) {
+func benchmarkUnion(b *testing.B, numberOfItems int) {
 	s := New()
 	u := New()
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < numberOfItems/2; i++ {
 		s.Add(i)
+	}
+
+	for i := 0; i < numberOfItems; i++ {
 		u.Add(i)
 	}
 
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		s.IsEqual(u)
+		Union(s, u)
 	}
 }
 
-func BenchmarkSubset(b *testing.B) {
+func benchmarkDifference(b *testing.B, numberOfItems int) {
 	s := New()
 	u := New()
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < numberOfItems; i++ {
 		s.Add(i)
+	}
+
+	for i := 0; i < numberOfItems/2; i++ {
 		u.Add(i)
 	}
 
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		s.IsSubset(u)
+		Difference(s, u)
 	}
 }
 
@@ -150,17 +110,63 @@ func benchmarkIntersection(b *testing.B, numberOfItems int) {
 	s1 := New()
 	s2 := New()
 
-	for i := 0; i < numberOfItems/2; i++ {
+	for i := 0; i < b.N/2; i++ {
 		s1.Add(i)
 	}
-	for i := 0; i < numberOfItems; i++ {
+
+	for i := 0; i < b.N; i++ {
 		s2.Add(i)
 	}
 
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for i:= 0; i < b.N; i++{
 		Intersection(s1, s2)
 	}
+}
+
+func BenchmarkUnion2(b *testing.B) {
+	benchmarkUnion(b, 2)
+}
+
+func BenchmarkUnion10(b *testing.B) {
+	benchmarkUnion(b, 10)
+}
+
+func BenchmarkUnion100(b *testing.B) {
+	benchmarkUnion(b, 100)
+}
+
+func BenchmarkUnion1000(b *testing.B) {
+	benchmarkUnion(b, 1000)
+}
+
+func BenchmarkUnion100000(b *testing.B) {
+	benchmarkUnion(b, 100000)
+}
+
+func BenchmarkDifference2(b *testing.B) {
+	benchmarkDifference(b, 2)
+}
+
+func BenchmarkDifference10(b *testing.B) {
+	benchmarkDifference(b, 10)
+}
+
+func BenchmarkDifference100(b *testing.B) {
+	benchmarkDifference(b, 100)
+}
+
+func BenchmarkDifference1000(b *testing.B) {
+	benchmarkDifference(b, 1000)
+}
+
+func BenchmarkDifference100000(b *testing.B) {
+	benchmarkDifference(b, 100000)
+}
+
+func BenchmarkIntersection2(b *testing.B) {
+	benchmarkIntersection(b, 2)
 }
 
 func BenchmarkIntersection10(b *testing.B) {
@@ -175,14 +181,6 @@ func BenchmarkIntersection1000(b *testing.B) {
 	benchmarkIntersection(b, 1000)
 }
 
-func BenchmarkIntersection10000(b *testing.B) {
-	benchmarkIntersection(b, 10000)
-}
-
 func BenchmarkIntersection100000(b *testing.B) {
 	benchmarkIntersection(b, 100000)
-}
-
-func BenchmarkIntersection1000000(b *testing.B) {
-	benchmarkIntersection(b, 1000000)
 }

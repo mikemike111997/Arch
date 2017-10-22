@@ -242,7 +242,7 @@ func (s *set) Merge(t Interface) {
 }
 
 // it's not the opposite of Merge.
-// Separate removes the set items containing in t from set s. Please aware that
+// Separate removes the set items containing in t from set s.
 func (s *set) Separate(t Interface) {
 	s.Remove(t.List()...)
 }
