@@ -139,7 +139,6 @@ func (s *Set) List() []interface{} {
 	for item := range s.m {
 		list = append(list, item)
 	}
-
 	return list
 }
 
