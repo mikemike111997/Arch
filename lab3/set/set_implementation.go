@@ -4,6 +4,7 @@ import (
 	"sync"
 	"fmt"
 	"strings"
+	"runtime"
 )
 
 // Set defines a thread safe set data structure.
@@ -312,9 +313,10 @@ func (s *set) IsSuperset(t Interface) bool {
 // visited, or if the closure returns false.
 func (s *set) Each(f func(item interface{}) bool) {
 	// var wg sync.WaitGroup
-
+	// we are using 6 logic threads
+	var _ = runtime.GOMAXPROCS(6)
 	for item := range s.m {
-		// wg.Add(1)
+		// add do compareing in go func
 		go f(item)
 	}
 }

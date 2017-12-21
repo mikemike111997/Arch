@@ -6,6 +6,7 @@ import (
 	"strconv"
 	// "reflect"
 	"time"
+	"runtime"
 
 )
 
@@ -15,7 +16,7 @@ func main() {
 	set1 := set.New()
 
 	// Add items concurrently (item1, item2, and so on)
-	for i := 0; i < 1000000; i++ {
+	for i := 0; i < 1000; i++ {
 		item := "item" + strconv.Itoa(i)
 		set1.Add(item)
 	}
@@ -25,7 +26,7 @@ func main() {
 	// fmt.Println("TypeOf(set1) = ", reflect.TypeOf(set1).String())
 
 	set2 := set.New()
-	for i := 50000; i < 1500000; i++ {
+	for i := 500; i < 1500; i++ {
 		item := "item" + strconv.Itoa(i)
 		set2.Add(item)
 	}
@@ -37,6 +38,9 @@ func main() {
 	// fmt.Println("set1 - set2\n\t", set.Difference(set1, set2))
 	// fmt.Println("set1 * set2\n\t", set.Intersection(set1, set2))
 	
+	var _ = runtime.GOMAXPROCS(30)
+	fmt.Println(runtime.GOMAXPROCS(-1))
+
 	set.Union(set1, set2)
 	set.Difference(set1, set2)
 	set.Intersection(set1, set2)
