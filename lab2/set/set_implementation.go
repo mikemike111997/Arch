@@ -311,11 +311,9 @@ func (s *set) IsSuperset(t Interface) bool {
 // set member. Traversal will continue until all items in the Set have been
 // visited, or if the closure returns false.
 func (s *set) Each(f func(item interface{}) bool) {
-	// var wg sync.WaitGroup
 
 	for item := range s.m {
-		// wg.Add(1)
-		go f(item)
+		f(item)
 	}
 }
 

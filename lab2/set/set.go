@@ -1,8 +1,8 @@
 package set
 
-// import (
-// 	"sync"
-// )
+import (
+	"sync"
+)
 
 // Interface is describing a Set. Sets are an unordered, unique list of values.
 type Interface interface {
@@ -66,7 +66,7 @@ func Difference(set1, set2 Interface, sets ...Interface) Interface {
 func Intersection(sets ...Interface) Interface {
 	all := Union(sets...)
 	result := Union(sets...)
-	// var wg sync.WaitGroup
+	var wg sync.WaitGroup
 	all.Each(func(item interface{}) bool {
 	// 	if !set1.Has(item) || !set2.Has(item) {
 	// 		result.Remove(item)
@@ -75,22 +75,22 @@ func Intersection(sets ...Interface) Interface {
 
 		for _, set := range sets {
 			// fmt.Println(item)
-			// wg.Add(1)
-			// go func(s interface{}, wg *sync.WaitGroup){
+			wg.Add(1)
+			go func(s interface{}, wg *sync.WaitGroup){
 
-				// defer wg.Done()
+				defer wg.Done()
 
 				if !set.Has(item) {
 					result.Remove(item)
 				}
 				
-			// }(set, &wg)
+			}(set, &wg)
 
 		}
 		
 		return true
 	})
 
-	// wg.Wait()
+	wg.Wait()
 	return result
 }
